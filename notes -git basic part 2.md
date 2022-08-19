@@ -1,0 +1,129 @@
+# Git fundamental part 2
+
+## Deleting files from the working directory
+
+We can directly delete the `tracked` files from the working directory from the explorer. This changes will be tracked by git and when we do the next commit the files are deteled. 
+
+To stage the changes for an untracked file we can directly add or use remove command 
+
+Suppose we delete the file.txt:
+```git
+git add file.txt
+```
+or
+```git 
+git rm file.txt
+```
+
+## Undoing changes of the unstaged files
+
+For undoing changes of a particular file we simply use `restore` command:
+
+```git 
+git restore file.txt
+```
+for undoing all the files in the working directory:
+
+```git 
+git restore .
+```
+This reverts back to the previous latest commit of that repository. 
+
+Now suppose we add a new file in the working directory and we want to revert back to latest commit. Here in this case, we can use `clean` command:
+
+1. First we list down all the untracked files in the repository that is to be removed:
+```git 
+git clean -dn
+```
+2. After listing down and reviewing the files properly, we can force it to delete:
+```git 
+git clean -df
+```
+
+## Undoing staged changes
+
+When we make any changes in the working directory and we `add` or staged these changes to our repository's staging area. And after carefully reviewing it, we decide to undo the changes. Then how do we undo these staged changes ? 
+
+we first unstage the changes using `restore`:
+```git 
+git restore --staged file.txt
+```
+This will unstage the changes that is to be restored.  Now to revert back to the previous changes:
+```git 
+git restore file.txt
+```
+We can also use `checkout` but `restore` command is more explicit. And `checkout` command is used mostly for other purpose as well (like switching branches)
+
+## Reset to previous commit
+
+If we want to revert back to a previous commit, we can use the `reset` commit. 
+
+The `reset` commit can used in three different ways:
+
+1. deleting the latest commit but keeping the changes in the staging area:
+
+```git 
+git reset --soft HEAD~1
+```
+here `~1` denotes delete the commit by step 1 i.e. the latest commit.
+2. To delete the commit with removing the changes from staging area as well:
+
+```git 
+git reset HEAD~1
+```
+
+3. To completely detele the changes along with the commit:
+
+```git 
+git reset --hard HEAD~1
+```
+
+## Deleting branches
+
+For deleting the branches, we have two options
+
+- 
+```
+git branch -d
+```
+Here small d means delete branch only if it merges to the current branch
+- 
+```
+git branch -D
+```
+capital means it deletes the branch even if the branch doesnot merge with the current branch
+
+
+## Working with detached head 
+
+When working with detached head, we need to keep in mind that the detached head creates a temporary branch. This temporary branch gets deleted once we switch to other branch. So make sure to save the changes into a branch. 
+
+say for example we checkout to a new commit: 
+``` 
+git checkout bd71d4516d8e6993a82b8e2fbfb526cf08b6c71d
+```
+now we are a detached head state. This will create a temporary branch, git deletes this branch once we switch to an existing branch. If you want to create a new branch to retain commits you create, you may
+```
+git switch -c <new-branch-name>
+```
+
+or after switching to the branch, we can retain the changes from the detached head branch, we crete a branch from the temporary branch:
+
+```git
+git branch <new-branch-name> c9dbb2e
+```
+Here the code given is the reference to the detached head branch. after this we can merge the changes into our other branches as required.
+
+## gitignore file
+
+This file with extension `.gitignore` is to be created manually by users. This has to be in the working directory. This file mainly consists files that has to be ignored by git for tracking. With this git will know not to track these files. 
+
+
+to ignore files we simply type the name of the file or the extension of it, for example:
+
+`file.txt` will ignore that file and `*.txt` means ignore all text files
+
+Also we can include a particular file using: `!file.txt`. This is helpful when we want to include only one particular text file to be updated out of many
+
+also we can ignore all the files in a particular folder:
+`folder\*`

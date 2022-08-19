@@ -1,0 +1,94 @@
+# GIT deep dive
+
+>## git stash
+
+Using `git stash` we can store uncommit and unstaged changes. stash is like internal memory or cache. It allows to store unstaged changes and afterwards we can refer to the changes whenever we want and stage the changes
+
+1. To stash changes, we have to type the following command after making and saving the changes:
+```git
+git stash
+```
+2. To apply the changes:
+```git 
+git stash apply
+```
+3. If we want to continue making changes and saving it, we can further use the `stash` command after each changes we make. Note here after we use stast at each stage, the file state will be back to the previous commit
+
+4. To view the changes using `stash`:
+
+```git
+git stast list
+```
+output
+```git
+stash@{0}: WIP on master: 7ebf1a4 initial commit
+stash@{1}: WIP on master: 7ebf1a4 initial commit
+```
+The changes will be index from 0 to 1, 0 being the latest update. Also important to note that, the `stash apply` command will always apply the latest changes
+
+5. Stash list can be confusing sometimes when storing a lot of changes in stash list. We can also provide a message after each stash:
+
+```git
+git stash push -m "your message here"
+```
+
+6. Suppose we are done with changes on stash list, we can add the changes to be tracked with a particular index number of the change:
+
+```git
+git stash pop 0
+```
+
+Note: When adding the changes, the change is deleted from the stash list
+
+7. Deleting the stash list
+
+We can delete the individual stash changes using:
+```git
+git stash drop 0
+```
+or we could delete all:
+```git 
+git stash clear
+```
+
+>## git reflog
+suppose we make a change and commit it. After that we realise to reset to the previous commit:
+
+```git
+git reset --hard HEAD~1
+```
+After this we have the latest commit deleted. Now if we want to have this commit which is gone now, we can use the `git reflog` command. This return history of commits that we made. This is a temporary history that stays for 30 days, after that it gets deleted. This is very important for backing the files. 
+
+to restore the previous deleted commits:
+```git
+git reflog
+```
+returns history:
+```git
+cb32ad5 (HEAD -> master) HEAD@{0}: reset: moving to HEAD~1
+2645bc6 HEAD@{1}: commit: file 2 added
+cb32ad5 (HEAD -> master) HEAD@{2}: commit: added notes for git stash
+7ebf1a4 HEAD@{3}: reset: moving to HEAD
+7ebf1a4 HEAD@{4}: reset: moving to HEAD
+7ebf1a4 HEAD@{5}: reset: moving to HEAD
+7ebf1a4 HEAD@{6}: commit (initial): initial commit
+```
+Each commits are having a hash code associated with it. By refering to a hash, we can recover the commit:
+
+```git
+git reset --hard 2645bc6
+```
+
+We can also recover the deleted branches using `git reflog`:
+
+for restoring a branch we have to go the last commit that we made in that branch:
+
+```git 
+git checkout 5489688
+```
+At this moment, we are at the headless state (meaning on current branch)
+After this we can switch and create a new branch that will store this headless commit:
+```git
+git switch -c "new_brnach_name"
+```
+With this we can restore deleted commits and branches using `git reflog`

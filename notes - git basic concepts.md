@@ -1,0 +1,221 @@
+![](https://www.fullstackpython.com/img/logos/git.png)
+
+># Hands on version controling with git
+
+>## Initializing repository in the local computer
+
+Go to the project folder where the verion controling is required
+
+```git
+cd "project folder location"
+```
+the type the following command:
+
+```git
+$git init
+```
+
+**What does `git init` exactly does?**
+
+the git init will initialize the repository (which is responsible for tracking changes) and make the current working folder as the reference "working directory".
+Any changes made to this working directory will be tracked by the git and will be stored in the repository.  
+
+It is very important to note that the git doesnot create any copies of the same file to track changes. but only tracks the changes in the file (for example code). 
+
+This will create a `.git` folder in your project folder. This is how git stores the history of your project. We dont have to touch it as it is used by the git in backgroud to track changes. That is why it is kept hidden.
+
+>## Git Workflow
+
+Taking Snapshots: When we make a lot of changes in our project that changes are tracked by git and we can take the snapshots or save the changes by committing it that will push the files with updated changes to the local/remote repository.
+
+Staging area: This is an area in between the local directory and committing the changes. It is where we can review the changes before committing.
+
+![](https://res.cloudinary.com/practicaldev/image/fetch/s--Si7ksd-d--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://cdn-images-1.medium.com/max/800/1%2AdiRLm1S5hkVoh5qeArND0Q.png)
+
+
+>## Staging area
+
+to check which are files are already added to the staging area:
+
+```git 
+git ls-files
+```
+
+The usefulness of staging area is if we make a total of 3 changes, and suppose after reviewing it we have to approved only 2 out of 3 changes, then we can unstage the unwanted one and commit the rest of the changes. 
+
+Here an important concept is that the working directory and the reposistory are two different terms. The working directory is where we keep our files. repository is a default git's part which tracks the changes. It consists of two different parts - staging area and commit area. 
+
+To save the changes and push the changes to staging area we use:
+
+```git
+git add file.py
+```
+
+Note: After committing the changes, the staging area will store the latest updated file unless we make the changes in the staging area
+
+>## Git Commit
+
+```git
+git commit -m "inital upload"
+```
+
+Once the changes are committed to the repository, then the changes are tracked behind the scenes by git. A image showing how the changes are tracked:
+
+![](https://www.researchgate.net/publication/289601506/figure/fig4/AS:961688065032209@1606295710747/Git-commit-history-graph-This-excerpt-shows-a-typical-sequence-of-commits-and-commit.gif)
+
+With this we can also revert back to previous revision if there is any bugs found in the new one. 
+
+Each git commit will consist of:
+1. ID
+2. Message of the commit 
+3. Date/Time
+4. Author by whom the changes were made
+5. And the complete snapshot of the changes
+
+One important thing to remember is that the git stores the complete updated project not only the changes to it. With this it can restore the project state very quickly. while storing the complete project at each commit, it compresses the content and doesnot store duplicates.
+
+If we want to see all the git commits, we can use `git log`:
+
+>## Git log
+
+```git
+git commit
+```
+This returns: 
+```git 
+commit 6f7542808ab63736bfba0a0f2e46cb74b70ceec5 (HEAD -> master)
+Author: Kavyajeet Bora <KVBA@ramboll.com>
+Date:   Fri Aug 12 13:04:10 2022 +0530
+
+    added the notes for git concepts in markdown format
+
+commit f901f5cd438373ed0f0acc2f5ed738da8ac2b43c
+Author: Kavyajeet Bora <KVBA@ramboll.com>
+Date:   Fri Aug 12 10:43:09 2022 +0530
+
+    initial commit
+
+commit 2215dfc47694b494435803ccbea5af9097a25cbc
+Author: kavyajeetbora <kavyajeetbora@gmail.com>
+Date:   Fri Apr 1 15:31:40 2022 +0530
+
+    initial commit
+
+commit bc85dbba583bb268eb229d5b4ff71716a986e4af (origin/master)
+Author: kavyajeetbora <kavyajeetbora@gmail.com>
+Date:   Fri Apr 1 15:26:34 2022 +0530
+
+    updated more function
+```
+
+This is will give information about each commit and along with the commit id
+
+**Note:** The git log remains in "open" mode. To exit the git log command press `q` button
+
+>## Git branching 
+
+- suppose we want to add a new feature in our existing project without interfering with running project that is on `master` branch. 
+- We can create a new branch that will create a copy of the master branch. This branch will be an independent copy and git will track changes made to this file only on this branch and not interfere with the `master` branch
+
+1. to create a branch:
+```git 
+git branch "branch name"
+```
+2. to see all the branches in the repository:
+
+```git
+git branch
+```
+3. To switch to a branch, we use:
+```git
+git checkout "branch-name"
+```
+or new command which more explicit and recommended:
+```
+git switch new_branch
+```
+if we want to switch and create a new branch at all once:
+```git
+git switch -c new-branch
+```
+
+## Git merge
+
+From the current branch we can directory merge the other branches using:
+
+```git
+git merge "branch_name"
+```
+
+This will merge the files together
+
+## What are Head and detached head in GIT ?
+
+head is nothing but reference to the latest commit of the checkedout branch. 
+
+If we switch to a different branch, then the head becomes latest commit of that branch.
+
+We can checkout the head for the current branch using 
+
+```git 
+git log
+```
+output:
+```git 
+commit f6724f1b4eb99b4247b4c58f40780fccb36dffa5 (HEAD -> master, new_feature)
+Author: Kavyajeet Bora <KVBA@ramboll.com>
+Date:   Mon Aug 15 11:50:41 2022 +0530
+
+    'Doesnot have a commit checkout' issue fixed
+
+commit 35878b96e2df80ab44419b7a0b5e2e7aeae4cdd6
+Author: Kavyajeet Bora <KVBA@ramboll.com>
+Date:   Mon Aug 15 11:43:22 2022 +0530
+
+<<<<<<< HEAD
+    new branch
+
+```
+Here we can see the head is nothing but a pointer to the latest commit of the current branch.
+
+When we directly switch to the commit unique ID of any branch, then we get detached head state:
+
+```git 
+git checkout f6724f1b4eb99b4247b4c58f40780fccb36dffa5
+```
+output:
+
+```git 
+Note: switching to 'f6724f1b4eb99b4247b4c58f40780fccb36dffa5'.
+
+You are in 'detached HEAD' state. You can look around, make experimental 
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.      
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at f6724f1 'Doesnot have a commit checkout' issue fixed
+M       notes - git basic concepts.md
+```
+
+With  this we are not in any of the branch but a temporary branch that git creates:
+```git 
+git branch
+```
+output:
+```git 
+* (HEAD detached at f6724f1)
+  master
+  new_feature
+  udemy
+```
+We can switch back to a branch using `checkout` to a branch.
