@@ -1,4 +1,4 @@
-<img src="https://www.fullstackpython.com/img/logos/git.png" height=200/>
+<img src="https://www.fullstackpython.com/img/logos/git.png" height=100/>
 
 # git and github fundamentals
 
