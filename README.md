@@ -1,4 +1,4 @@
-![](https://www.fullstackpython.com/img/logos/git.png)
+<img src="https://www.fullstackpython.com/img/logos/git.png" height=200/>
 
 # git and github fundamentals
 
